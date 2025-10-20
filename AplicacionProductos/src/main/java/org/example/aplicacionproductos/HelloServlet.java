@@ -4,6 +4,8 @@ import java.io.*;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.example.aplicacionproductos.Clases.ODSController;
+import org.example.aplicacionproductos.Clases.SeguridadController;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
@@ -15,6 +17,9 @@ public class HelloServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
+
+        ODSController ods = new ODSController();
+        SeguridadController seg = new SeguridadController();
 
         // Hello
         PrintWriter out = response.getWriter();

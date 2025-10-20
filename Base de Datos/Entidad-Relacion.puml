@@ -1,0 +1,34 @@
+@startuml
+
+' Título del diagrama
+title Diagrama de Clases - Proyecto Web
+
+' Definición de clases
+class Usuario {
+  -id: int
+  -nombre: String
+  -email: String
+  +login(): boolean
+  +registrar(): void
+}
+
+class Producto {
+  -id: int
+  -nombre: String
+  -precio: double
+  +calcularDescuento(): double
+}
+
+class Pedido {
+  -id: int
+  -fecha: Date
+  -usuario: Usuario
+  +agregarProducto(p: Producto): void
+  +calcularTotal(): double
+}
+
+' Relaciones
+Usuario "1" -- "0..*" Pedido : realiza
+Pedido "1" -- "1..*" Producto : contiene
+
+@enduml
