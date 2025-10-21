@@ -1,0 +1,22 @@
+@startmindmap
+* Pantalla Inicial
+** Crear Usuario
+** Iniciar Sesion
+*** Pantalla Inicio Admin
+**** Administrar Usuarios
+***** Crear Usuario
+***** Listado Usuarios
+***** Eliminar Usuario
+**** Administrar Productos
+***** Crear Productos
+***** Crear Lote
+***** Listado productos
+***** Eliminar Lote
+***** Eliminar Producto
+*** Pantalla Inicio Cliente
+**** Ver Productos
+***** Agregar Producto al Carrito
+**** Ver Carrito
+***** Eliminar Producto
+***** Finalizar venta
+@endmindmap

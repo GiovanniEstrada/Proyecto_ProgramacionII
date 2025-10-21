@@ -1,34 +1,125 @@
 @startuml
+title Esquema Bases de Datos
 
-' Título del diagrama
-title Diagrama de Clases - Proyecto Web
 
-' Definición de clases
-class Usuario {
-  -id: int
-  -nombre: String
-  -email: String
-  +login(): boolean
-  +registrar(): void
+together{
+  package "DB_ODS"{
+
+    entity Cliente {
+      +Id : INT <<PK>>
+      Usuario : VARCHAR(20)
+      NombreCompleto : VARCHAR(60)
+      Correo : VARCHAR(60)
+      Estatus : INT <<FK>>
+    }
+
+    entity Productos {
+      +Id : INT <<PK>>
+      TipoProducto : INT <<FK>>
+      NombreProducto : VARCHAR(50)
+      PrecioUnidad : DECIMAL(7,2)
+    }
+
+    entity Lote {
+      +Id : INT <<PK>>
+      IdProducto : INT <<FK>>
+      FechaCaducidad : DATE
+      CantidadInicial : INT
+      CantidadRestante : INT
+      Estatus : BIT
+    }
+
+    entity Carrito {
+      +IdCarrito : INT <<PK>>
+      CantidadItems : INT
+      Total : DECIMAL(7,2)
+      Estatus : TINYINT <<FK>>
+    }
+
+    entity EstatusCompra {
+      +Id : INT <<PK>>
+      Descripcion : VARCHAR(60)
+    }
+
+    entity RelacionCarritoUsuario {
+      IdCarrito : INT <<FK>>
+      IdUsuario : INT <<FK>>
+    }
+
+    entity DetalleCarrito {
+      IdCarrito : INT <<FK>>
+      Item : INT
+      Lote : INT <<FK>>
+      Cantidad : INT
+      ValorTotal : DECIMAL(7,2)
+      Estado : BIT
+    }
+
+    entity Facturas {
+      +Id : INT <<PK>>
+      IdCarrito : INT <<FK>>
+      NIT : VARCHAR(15)
+      MetodoPago : INT <<FK>>
+      TipoCuenta : INT <<FK>>
+      NoCuenta : INT
+    }
+
+    entity MetodoPago {
+      +Id : INT <<PK>>
+      Descripcion : VARCHAR(60)
+    }
+
+    entity TipoCuenta {
+      +Id : INT <<PK>>
+      Descripcion : VARCHAR(60)
+    }
+
+    entity TipoProducto {
+      +Id : INT <<PK>>
+      Descripcion : VARCHAR(60)
+    }
+
+    Productos ||--o{ TipoProducto
+    Carrito ||--o{ EstatusCompra
+    RelacionCarritoUsuario ||--o{ Cliente
+    RelacionCarritoUsuario ||--o{ Carrito
+    DetalleCarrito ||--o{ Carrito
+    DetalleCarrito ||--o{ Lote
+    Carrito }o--|| Facturas
+    Lote ||--o{ Productos
+    Facturas ||--o{ MetodoPago
+    Facturas ||--o{ TipoCuenta
+
+  }
+
+  package "DB_SEGURIDAD"{
+    entity Usuarios {
+      +Id : INT <<PK>>
+      Usuario : VARCHAR(20)
+      Password : VARCHAR(60)
+      NombreCompleto : VARCHAR(60)
+      Correo : VARCHAR(60)
+      Estatus : TINYINT <<FK>>
+      TipoUsuario : TINYINT <<FK>>
+      FechaHoraCreacion : DATETIME
+      FechaHoraUltimaConexion : DATETIME
+    }
+
+
+    entity EstatusUsuario {
+      +Id : TINYINT <<PK>>
+      Descripcion : VARCHAR(60)
+    }
+
+    entity TipoUsuario {
+      +Id : TINYINT <<PK>>
+      Descripcion : VARCHAR(60)
+    }
+
+    Usuarios ||--o{ EstatusUsuario
+    Usuarios ||--o{ TipoUsuario
+
+  }
 }
-
-class Producto {
-  -id: int
-  -nombre: String
-  -precio: double
-  +calcularDescuento(): double
-}
-
-class Pedido {
-  -id: int
-  -fecha: Date
-  -usuario: Usuario
-  +agregarProducto(p: Producto): void
-  +calcularTotal(): double
-}
-
-' Relaciones
-Usuario "1" -- "0..*" Pedido : realiza
-Pedido "1" -- "1..*" Producto : contiene
 
 @enduml
