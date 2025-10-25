@@ -86,4 +86,25 @@ public class SeguridadController extends DBController {
         }
         return null;
     }
+
+    public boolean actualizarUsuario(int id){
+        try{
+            String qryInsertaUsuario = "UPDATE `usuarios` SET `Estatus`='0' WHERE Id = ?";
+            PreparedStatement ps = conn.prepareStatement(qryInsertaUsuario);
+            ps.setInt(1, id);
+
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                return true;
+            } else {
+                System.out.println("No se logró eliminar el usuario");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener el usuario: " + e.getMessage());
+        }
+
+        return false;
+    }
 }

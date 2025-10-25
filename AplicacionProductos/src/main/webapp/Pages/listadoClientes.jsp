@@ -44,7 +44,7 @@
             <td><%= u.getNombreCompleto() %></td>
             <td><%= u.getCorreo() %></td>
             <td class="text-center">
-                <form action="cliente" method="post" style="display:inline;">
+                <form action="AdminUsuario" method="post" style="display:inline;">
                     <input type="hidden" name="accion" value="eliminar">
                     <input type="hidden" name="id" value="<%= u.getId() %>">
                     <button type="submit" class="btn btn-danger btn-sm"
