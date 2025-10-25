@@ -66,7 +66,7 @@ public class srvLogin extends HttpServlet {
 
                     request.getRequestDispatcher("Pages/menuAdmin.jsp").forward(request, response);
                 } else {
-                    request.getRequestDispatcher("Pages/menuUsuario.jsp").forward(request, response);
+                    response.sendRedirect("AdminUsuario");
                 }
             }
 

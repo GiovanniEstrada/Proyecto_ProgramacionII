@@ -224,7 +224,7 @@ public class ODSController extends DBController{
         return null;
     }
 
-    public boolean creaCarrito(int cantidad, double total, int estatus){
+    public int creaCarrito(int cantidad, double total, int estatus){
         try{
             String qryInsertaCarrito = "INSERT INTO `carrito`( `CantidadItems`, `Total`, `Estatus`) VALUES (?,?,?)";
             PreparedStatement ps = conn.prepareStatement(qryInsertaCarrito);
@@ -234,17 +234,21 @@ public class ODSController extends DBController{
 
             int resultado = ps.executeUpdate();
             if (resultado > 0) {
-                return true;
+                ResultSet res = ps.getGeneratedKeys();
+                if (res.next()) {
+                    return res.getInt(1);
+                }
+                return 0;
             } else {
                 System.out.println("No se logró crear el carrito");
-                return false;
+                return 0;
             }
 
         } catch (Exception e) {
             System.out.println("Error al crear el producto: " + e.getMessage());
         }
 
-        return false;
+        return 0;
     }
 
     public RelacionUsuarioCarrito listadoDetalleCarrito(int usuario){
@@ -264,10 +268,10 @@ public class ODSController extends DBController{
         return null;
     }
 
-    public Carrito obtieneCarrito(int usuario){
+    public Carrito obtieneCarrito(int id){
         try{
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM carrito C INNER JOIN relacioncarritousuario R ON R.IdCarrito = C.Id AND C.Estatus = 1 AND R.IdUsuario = ?");
-            ps.setInt(1, usuario);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM carrito C WHERE C.Id = ? AND C.Estatus = 1");
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 Carrito carrito = new Carrito();

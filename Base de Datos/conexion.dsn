@@ -1,0 +1,7 @@
+[ODBC]
+DRIVER=MySQL ODBC 8.0 Unicode Driver
+SERVER=127.0.0.1
+USER=root
+PASSWORD=
+DATABASE=mitienda
+PORT=3306

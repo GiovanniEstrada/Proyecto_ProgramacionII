@@ -28,6 +28,7 @@ public class srvRegistrar extends HttpServlet {
             String correo = request.getParameter("correo");
             LocalDateTime time = null;
 
+
             if(seguridad.crearUsuario(usuario, pwd, correo, nombreCompleto)){
                 if(ods.crearUsuario(usuario, nombreCompleto)){
                     System.out.println("Usuario creado correctamente");

@@ -33,27 +33,31 @@ public class srvAgregarCarrito extends HttpServlet {
             // SE VALIDA SI EXISTE EL CARRITO
             RelacionUsuarioCarrito relacionCarrito = new RelacionUsuarioCarrito();
             relacionCarrito = ods.obtieneRelacionCarro(usuario.getId());
-
+            int idCarrito = 0;
             // SI NO EXISTE SE CREA EL CARRITO
             if(relacionCarrito==null){
-                ods.creaCarrito(0, 0, 1);
+                idCarrito = ods.creaCarrito(0, 0, 1);
+            } else {
+                idCarrito = relacionCarrito.idCarrito;
             }
 
             Carrito carrito = new Carrito();
             carrito = ods.obtieneCarrito(usuario.getId());
 
             if(relacionCarrito==null){
-                ods.creaRelacionCarrito(carrito.idCarrito, usuario.getId());
+                ods.creaRelacionCarrito(idCarrito, usuario.getId());
             }
 
             ods.creaDetalleCarrito(
-                    carrito.idCarrito,
+                    idCarrito,
                     Integer.parseInt(request.getParameter("idProducto")),
                     0,
                     1,
                     Float.parseFloat(request.getParameter("precio")));
 
         }
+
+        response.sendRedirect("despliegaProductos");
 
     }
 }

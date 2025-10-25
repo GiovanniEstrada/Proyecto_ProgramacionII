@@ -13,6 +13,7 @@ public class srvCarrito extends HttpServlet {
     public void init(){}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         request.getRequestDispatcher("Pages/Carrito.jsp").forward(request, response);
     }
 }

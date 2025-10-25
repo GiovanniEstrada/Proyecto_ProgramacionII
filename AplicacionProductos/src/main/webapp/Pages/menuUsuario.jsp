@@ -49,10 +49,11 @@
             %>
             <tr>
                 <td><%= p.Producto %></td>
-                <td name="precio" value="<%= p.Precio %>"><%= p.Precio %></td>
+                <td><%= p.Precio %></td>
                 <td>
                     <form action="agregaCarrito" method="post" class="d-inline">
                         <input type="hidden" name="opt" value="1">
+                        <input type="hidden" name="precio" value="<%= p.Precio %>">
                         <input type="hidden" name="idProducto" value="<%= p.Lote %>">
                         <button type="submit" class="btn btn-success btn-sm">
                             Agregar al carrito
