@@ -21,7 +21,7 @@
                     <a class="nav-link active" href="despliegaProductos">Productos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="carrito.jsp">Carrito</a>
+                    <a class="nav-link" href="verCarrito">Carrito</a>
                 </li>
             </ul>
         </div>
@@ -49,9 +49,9 @@
             %>
             <tr>
                 <td><%= p.Producto %></td>
-                <td><%= p.Precio %></td>
+                <td name="precio" value="<%= p.Precio %>"><%= p.Precio %></td>
                 <td>
-                    <form action="carrito" method="post" class="d-inline">
+                    <form action="agregaCarrito" method="post" class="d-inline">
                         <input type="hidden" name="opt" value="1">
                         <input type="hidden" name="idProducto" value="<%= p.Lote %>">
                         <button type="submit" class="btn btn-success btn-sm">

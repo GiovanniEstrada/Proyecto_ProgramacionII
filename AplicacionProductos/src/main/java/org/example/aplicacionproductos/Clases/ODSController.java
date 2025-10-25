@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,4 +190,145 @@ public class ODSController extends DBController{
         }
         return null;
     }
+
+    public Usuario obtieneUsuarioPorNombre(String Usuario){
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM cliente WHERE Usuario = ?");
+            ps.setString(1, Usuario);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("Id"));
+                return usuario;
+            }
+        } catch (Exception e) {
+            System.err.println("Error al obtener el usuarios: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public RelacionUsuarioCarrito obtieneRelacionCarro(int usuario){
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM `relacioncarritousuario` WHERE IdUsuario = ?");
+            ps.setInt(1, usuario);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                RelacionUsuarioCarrito relacionUsuarioCarrito = new RelacionUsuarioCarrito();
+                relacionUsuarioCarrito.idCarrito = rs.getInt("IdCarrito");
+                relacionUsuarioCarrito.idUsuario = rs.getInt("IdUsuario");
+                return relacionUsuarioCarrito;
+            }
+        } catch (Exception e) {
+            System.err.println("Error al obtener el usuarios: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean creaCarrito(int cantidad, double total, int estatus){
+        try{
+            String qryInsertaCarrito = "INSERT INTO `carrito`( `CantidadItems`, `Total`, `Estatus`) VALUES (?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(qryInsertaCarrito);
+            ps.setInt(1, cantidad);
+            ps.setDouble(2, total);
+            ps.setInt(3, estatus);
+
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                return true;
+            } else {
+                System.out.println("No se logró crear el carrito");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al crear el producto: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public RelacionUsuarioCarrito listadoDetalleCarrito(int usuario){
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM `relacioncarritousuario` WHERE IdUsuario = ?");
+            ps.setInt(1, usuario);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                RelacionUsuarioCarrito relacionUsuarioCarrito = new RelacionUsuarioCarrito();
+                relacionUsuarioCarrito.idCarrito = rs.getInt("IdCarrito");
+                relacionUsuarioCarrito.idUsuario = rs.getInt("IdUsuario");
+                return relacionUsuarioCarrito;
+            }
+        } catch (Exception e) {
+            System.err.println("Error al obtener el usuarios: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public Carrito obtieneCarrito(int usuario){
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM carrito C INNER JOIN relacioncarritousuario R ON R.IdCarrito = C.Id AND C.Estatus = 1 AND R.IdUsuario = ?");
+            ps.setInt(1, usuario);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                Carrito carrito = new Carrito();
+                carrito.idCarrito = rs.getInt("IdCarrito");
+                carrito.cantidadItems = rs.getInt("CantidadItems");
+                carrito.total = rs.getFloat("total");
+                return carrito;
+            }
+        } catch (Exception e) {
+            System.err.println("Error al obtener el usuarios: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean creaRelacionCarrito(int idCarrito, int idUsuario){
+        try{
+            String qryInsertaCarrito = "INSERT INTO `relacioncarritousuario`(`IdCarrito`, `IdUsuario`) VALUES (?,?)";
+            PreparedStatement ps = conn.prepareStatement(qryInsertaCarrito);
+            ps.setInt(1, idCarrito);
+            ps.setInt(2, idUsuario);
+
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                return true;
+            } else {
+                System.out.println("No se logró crear el carrito");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al crear el producto: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public boolean creaDetalleCarrito(int idCarrito, int lote, int item, int cantidad, float valorTotal){
+        try{
+            String qryInsertaCarrito = "INSERT INTO `detallecarrito`(`IdCarrito`, `Lote`, `Item`, `Cantidad`, `ValorTotal`, `Estado`) VALUES (?,?,?,?,?,1)";
+            PreparedStatement ps = conn.prepareStatement(qryInsertaCarrito);
+            ps.setInt(1, idCarrito);
+            ps.setInt(2, lote);
+            ps.setInt(3, item);
+            ps.setInt(4, cantidad);
+            ps.setFloat(5, valorTotal);
+
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                return true;
+            } else {
+                System.out.println("No se logró crear el carrito");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al crear el producto: " + e.getMessage());
+        }
+
+        return false;
+    }
+    // SELECT * FROM carrito C INNER JOIN relacioncarritousuario R ON R.IdCarrito = C.Id AND R.IdUsuario = ''
+
+    // SELECT * FROM detallecarrito D INNER JOIN relacioncarritousuario R ON R.IdUsuario = '' LEFT JOIN lote L ON L.Id = D.Lote LEFT JOIN producto P ON P.Id = L.IdProducto
 }
