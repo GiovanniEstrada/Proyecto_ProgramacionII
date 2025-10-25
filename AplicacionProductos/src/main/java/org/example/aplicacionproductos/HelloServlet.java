@@ -2,6 +2,7 @@ package org.example.aplicacionproductos;
 
 import java.io.*;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.aplicacionproductos.Clases.ODSController;
@@ -15,17 +16,18 @@ public class HelloServlet extends HttpServlet {
         message = "Hello World!";
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
 
         ODSController ods = new ODSController();
         SeguridadController seg = new SeguridadController();
 
         // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
-        out.println("</body></html>");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+//        PrintWriter out = response.getWriter();
+//        out.println("<html><body>");
+//        out.println("<h1>" + message + "</h1>");
+//        out.println("</body></html>");
     }
 
     public void destroy() {
